@@ -4,7 +4,7 @@ const DAILY_LIMIT = 500;
 
 function sendLoad(number, amount) {
   if (amount <= 0) {
-    console.log(`❌ Invalid load amount.`);
+    console.log(` Invalid load amount.`);
     return;
   }
 

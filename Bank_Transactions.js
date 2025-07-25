@@ -1,13 +1,19 @@
-// Define accounts
 const accounts = [
-  { name: "Alice", balance: 0, dailyWithdrawn: 0, hasDeposited: false },
-  { name: "Bob", balance: 0, dailyWithdrawn: 0, hasDeposited: false },
-  { name: "Charlie", balance: 0, dailyWithdrawn: 0, hasDeposited: false }
+  { name: "Alice", balance: 0, dailyWithdrawn: 0, hasDeposited: false, lastWithdrawalDate: null },
+  { name: "Bob", balance: 0, dailyWithdrawn: 0, hasDeposited: false, lastWithdrawalDate: null },
+  { name: "Charlie", balance: 0, dailyWithdrawn: 0, hasDeposited: false, lastWithdrawalDate: null }
 ];
 
 const DAILY_LIMIT = 10000;
 
-// Deposit function
+function resetDailyWithdrawnIfNewDay(account) {
+  const today = new Date().toDateString(); 
+  if (account.lastWithdrawalDate !== today) {
+    account.dailyWithdrawn = 0;
+    account.lastWithdrawalDate = today;
+  }
+}
+
 function deposit(name, amount) {
   const account = accounts.find(acc => acc.name === name);
   if (!account) {
@@ -23,13 +29,16 @@ function deposit(name, amount) {
   console.log(`${name} deposited ₱${amount}. New balance: ₱${account.balance}`);
 }
 
-// Withdraw function
 function withdraw(name, amount) {
   const account = accounts.find(acc => acc.name === name);
   if (!account) {
     console.log(`Account not found for ${name}`);
     return;
   }
+  
+  // Reset dailyWithdrawn if it's a new day
+  resetDailyWithdrawnIfNewDay(account);
+  
   if (!account.hasDeposited) {
     console.log(`${name} must deposit first before withdrawing.`);
     return;
